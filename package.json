@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src --ignore-path .eslintignore --ext .js,.ts",
+    "lint": "npx eslint src --ignore-pattern .ts",
     "lint:fix": "npx eslint src --fix",
+    "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
+    "prettier:fix": "npx prettier --write src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -27,6 +29,7 @@
     "@typescript-eslint/parser": "^7.9.0",
     "eslint": "^8.57.0",
     "globals": "^15.2.0",
+    "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.9.0"
   }
