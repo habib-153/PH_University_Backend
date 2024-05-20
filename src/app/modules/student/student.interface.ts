@@ -1,3 +1,5 @@
+import { Model } from 'mongoose';
+
 export type UserName = {
   firstName: string;
   middleName?: string;
@@ -20,10 +22,11 @@ export type LocalGuardian = {
   address: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
   name: UserName;
-  gender: 'male' | 'female'| 'other';
+  password: string,
+  gender: 'male' | 'female' | 'other';
   dateOfBirth?: string;
   email: string;
   contactNo: string;
@@ -37,3 +40,14 @@ export type Student = {
   isActive: 'active' | 'blocked';
 };
 
+// for creating static
+export interface StdModel extends Model<TStudent> {
+  isUserExits(id: string): Promise<TStudent | null>
+}
+
+// for creating instance
+// export type StudentMethod = {
+//   isUserExits(id: string): Promise<TStudent>
+// }
+
+//  export type StudentModel = Model<TStudent , Record<string, never>, StudentMethod>;
