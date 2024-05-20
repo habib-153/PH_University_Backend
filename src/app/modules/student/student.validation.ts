@@ -1,48 +1,43 @@
-import Joi from 'joi'
+import exp from 'constants';
+import { z } from 'zod';
 
-const userNameJoiSchema = Joi.object({
-    firstName: Joi.string().required().trim().custom((value, helpers) => {
-      const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-      if (firstNameStr !== value) {
-        return helpers.message({ custom: "Value is not in capitalize format" });
-      }
-      return value;
-    }, 'capitalize format validation'),
-    middleName: Joi.string().trim(),
-    lastName: Joi.string().required().trim().alphanum(),
-  });
-  
-  const guardianJoiSchema = Joi.object({
-    fatherName: Joi.string().required(),
-    fatherOccupation: Joi.string().required(),
-    fatherContactNo: Joi.string().required(),
-    motherName: Joi.string().required(),
-    motherContactNo: Joi.string().required(),
-    motherOccupation: Joi.string().required(),
-  });
-  
-  const localGuardianJoiSchema = Joi.object({
-    name: Joi.string().required(),
-    occupation: Joi.string().required(),
-    contactNo: Joi.string().required(),
-    address: Joi.string().required(),
-  });
-  
-  const studentJoiSchema = Joi.object({
-    id: Joi.string().required(),
-    name: userNameJoiSchema.required(),
-    gender: Joi.string().valid('female', 'male', 'other').required(),
-    dateOfBirth: Joi.string(),
-    email: Joi.string().email().required(),
-    contactNo: Joi.string().required(),
-    emergencyContactNo: Joi.string().required(),
-    bloogGroup: Joi.string().valid('A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-'),
-    presentAddress: Joi.string().required(),
-    permanentAddres: Joi.string().required(),
-    guardian: guardianJoiSchema.required(),
-    localGuardian: localGuardianJoiSchema.required(),
-    profileImg: Joi.string().required(),
-    isActive: Joi.string().valid('active', 'blocked').default('active'),
-  });
+const userNameZodSchema = z.object({
+  firstName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string(),
+});
 
-export default studentJoiSchema;
+const guardianZodSchema = z.object({
+  fatherName: z.string(),
+  fatherOccupation: z.string(),
+  fatherContactNo: z.string(),
+  motherName: z.string(),
+  motherContactNo: z.string(),
+  motherOccupation: z.string(),
+});
+
+const localGuardianZodSchema = z.object({
+  name: z.string(),
+  occupation: z.string(),
+  contactNo: z.string(),
+  address: z.string(),
+});
+
+const studentZodSchema = z.object({
+  id: z.string(),
+  name: userNameZodSchema,
+  gender: z.enum(['female', 'male', 'other']),
+  dateOfBirth: z.string().optional(),
+  email: z.string().email(),
+  contactNo: z.string(),
+  emergencyContactNo: z.string(),
+  bloogGroup: z.enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-']).optional(),
+  presentAddress: z.string(),
+  permanentAddres: z.string(),
+  guardian: guardianZodSchema,
+  localGuardian: localGuardianZodSchema,
+  profileImg: z.string(),
+  isActive: z.enum(['active', 'blocked']).default('active'),
+});
+
+export default studentZodSchema
