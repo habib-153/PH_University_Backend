@@ -1,44 +1,50 @@
-import exp from 'constants';
 import { z } from 'zod';
 
-const userNameZodSchema = z.object({
-  firstName: z.string(),
-  middleName: z.string().optional(),
+const userNameSchema = z.object({
+  firstName: z
+    .string()
+    .min(1)
+    .max(20)
+    .refine((value) => /^[A-Z]/.test(value), {
+      message: 'First Name must start with a capital letter',
+    }),
+  middleName: z.string(),
   lastName: z.string(),
 });
 
-const guardianZodSchema = z.object({
+const guardianSchema = z.object({
   fatherName: z.string(),
   fatherOccupation: z.string(),
   fatherContactNo: z.string(),
   motherName: z.string(),
-  motherContactNo: z.string(),
   motherOccupation: z.string(),
+  motherContactNo: z.string(),
 });
 
-const localGuardianZodSchema = z.object({
+const localGuardianSchema = z.object({
   name: z.string(),
   occupation: z.string(),
   contactNo: z.string(),
   address: z.string(),
 });
 
-const studentZodSchema = z.object({
+export const studentValidationSchema = z.object({
   id: z.string(),
   password: z.string().max(20),
-  name: userNameZodSchema,
-  gender: z.enum(['female', 'male', 'other']),
-  dateOfBirth: z.string().optional(),
+  name: userNameSchema,
+  gender: z.enum(['male', 'female', 'other']),
+  dateOfBirth: z.string(),
   email: z.string().email(),
   contactNo: z.string(),
   emergencyContactNo: z.string(),
-  bloogGroup: z.enum(['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-']).optional(),
+  bloogGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
   presentAddress: z.string(),
-  permanentAddres: z.string(),
-  guardian: guardianZodSchema,
-  localGuardian: localGuardianZodSchema,
+  permanentAddress: z.string(),
+  guardian: guardianSchema,
+  localGuardian: localGuardianSchema,
   profileImg: z.string(),
   isActive: z.enum(['active', 'blocked']).default('active'),
+  isDeleted: z.boolean().optional(),
 });
 
-export default studentZodSchema
+export default studentValidationSchema;
