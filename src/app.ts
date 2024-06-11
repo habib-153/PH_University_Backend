@@ -1,7 +1,5 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { StudentRoutes } from './app/modules/student/student.route';
-import { userRoutes } from './app/modules/user/user.route';
 import notFound from './app/middlewares/notFound';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import router from './app/routes';
