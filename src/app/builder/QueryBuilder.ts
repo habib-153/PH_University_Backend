@@ -43,7 +43,7 @@ class QueryBuilder<T>{
 
     paginate(){
         const page = Number(this?.query?.page) || 1
-        const limit = Number(this?.query?.limit) || 1
+        const limit = Number(this?.query?.limit) || 5
         const skip = (page - 1) * limit
 
         this.modelQuery = this.modelQuery.skip(skip).limit(limit)
