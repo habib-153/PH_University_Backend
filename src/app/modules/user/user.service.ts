@@ -22,6 +22,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
   //set student role
   userData.role = 'student';
+  userData.email = payload.email;
 
   const admissionSemester = await AcademicSemester.findById(
     payload.admissionSemester,
@@ -74,9 +75,8 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   //if password is not given , use deafult password
   userData.password = password || (config.default_password as string);
 
-  //set student role
   userData.role = 'faculty';
-
+  userData.email = payload.email;
   // find academic department info
   const academicDepartment = await AcademicDepartment.findById(
     payload.academicDepartment,
@@ -116,10 +116,10 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     await session.endSession();
 
     return newFaculty;
-  } catch (err: any) {
+  } catch (err) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error(err);
+    throw new Error('Failed to create student');
   }
 };
 
@@ -130,8 +130,8 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
   //if password is not given , use deafult password
   userData.password = password || (config.default_password as string);
 
-  //set student role
   userData.role = 'admin';
+  userData.email = payload.email;
 
   const session = await mongoose.startSession();
 
@@ -162,10 +162,10 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
     await session.endSession();
 
     return newAdmin;
-  } catch (err: any) {
+  } catch (err) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error(err);
+    throw new Error('Failed to create student');
   }
 };
 
