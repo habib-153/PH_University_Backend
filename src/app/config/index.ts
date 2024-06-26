@@ -13,4 +13,5 @@ export default {
   jwt_refresh_secret: process.env.REFRESH_TOKEN_SECRET,
   default_password: process.env.DEFAULT_PASS,
   NODE_ENV: process.env.NODE_ENV,
+  RESET_PASS_UI_LINK: process.env.RESET_PASS_UI_LINK,
 };
