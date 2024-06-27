@@ -4,7 +4,7 @@ import { User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
 import config from '../../config';
 import { createToken } from './auth.utils';
-import jwt,{ JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { sendEmail } from '../../utils/sendEmail';
 
@@ -110,7 +110,7 @@ const changePassword = async (
   return null;
 };
 
-const refreshToken = async(token: string) =>{
+const refreshToken = async (token: string) => {
   // checking if the given token is valid
   const decoded = jwt.verify(
     token,
@@ -160,7 +160,7 @@ const refreshToken = async(token: string) =>{
   return {
     accessToken,
   };
-}
+};
 
 const forgetPassword = async (userId: string) => {
   // checking if the user is exist
@@ -191,17 +191,50 @@ const forgetPassword = async (userId: string) => {
   const resetToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
-    '10m'
+    '10m',
   );
 
-  const resetUILink = `${config.RESET_PASS_UI_LINK}?id=${user.id}token=${resetToken}`
+  const resetUILink = `${config.RESET_PASS_UI_LINK}?id=${user.id}token=${resetToken}`;
 
-  sendEmail(user.email,resetUILink)
-}
+  sendEmail(user.email, resetUILink);
+};
+
+const resetPassword = async (
+  payload: { id: string; newPassword: string },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  token: any,
+) => {
+  // checking if the user is exist
+  const user = await User.isUserExistsByCustomId(payload.id);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+  // checking if the user is already deleted
+  const isDeleted = user?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
+  }
+
+  // checking if the user is blocked
+  const userStatus = user?.status;
+
+  if (userStatus === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
+  }
+
+  const jwtPayload = {
+    userId: user.id,
+    role: user.role,
+  };
+  
+};
 
 export const AuthServices = {
   loginUser,
   changePassword,
   refreshToken,
-  forgetPassword
+  forgetPassword,
+  resetPassword,
 };
