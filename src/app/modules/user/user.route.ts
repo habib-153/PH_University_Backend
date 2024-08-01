@@ -11,7 +11,8 @@ import { userValidation } from './user.validation';
 const router = express.Router();
 
 router.post(
-  '/create-student', auth(USER_ROLE.admin),
+  '/create-student', 
+  // auth(USER_ROLE.admin),
   validateRequest(createStudentValidationSchema),
   UserControllers.createStudent,
 );
