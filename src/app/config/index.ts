@@ -14,4 +14,9 @@ export default {
   default_password: process.env.DEFAULT_PASS,
   NODE_ENV: process.env.NODE_ENV,
   RESET_PASS_UI_LINK: process.env.RESET_PASS_UI_LINK,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  nodemailer_user: process.env.NODEMAILER_USER,
+  nodemailer_pass: process.env.NODEMAILER_PASS,
 };

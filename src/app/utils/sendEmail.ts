@@ -7,8 +7,8 @@ export const sendEmail = async (to: string, html: string) => {
     port: 587,
     secure: config.NODE_ENV === 'production' ? true : false,
     auth: {
-      user: 'h.r.sihab155@gmail.com',
-      pass: 'hlzi wrux txwk ysqc',
+      user: config.nodemailer_user,
+      pass: config.nodemailer_pass,
     },
   });
 
