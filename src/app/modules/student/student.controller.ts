@@ -31,12 +31,13 @@ const updateStudent = catchAsync(async (req, res) => {
 
 const getAllStudents = catchAsync(async (req, res) => {
   const result = await StudentServices.getAllStudentsFromDB(req.query);
-
+  //console.log(result)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Student are retrieved successfully',
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 
